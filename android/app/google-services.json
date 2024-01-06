@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "4868910319",
+    "project_id": "petkub-a4423",
+    "storage_bucket": "petkub-a4423.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4868910319:android:0d5fd8689a08f2c2007f1a",
+        "android_client_info": {
+          "package_name": "com.example.getx_mvvm_boilerplate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx6RKBncKRS45I8Uetbk6xXjft3qEcnUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

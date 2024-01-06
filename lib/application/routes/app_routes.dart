@@ -9,4 +9,5 @@ abstract class Routes {
 
 abstract class _Paths {
   static const splashScreen = '/splashScreen';
+  static const navigator= '/navigator';
 }

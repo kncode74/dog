@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
-import 'package:getx_mvvm_boilerplate/ui/splash_screen/splash_screen.view.dart';
-import 'package:getx_mvvm_boilerplate/ui/splash_screen/splash_screen.vm.dart';
+import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.vm.dart';
+import 'package:getx_mvvm_boilerplate/ui/navigator_screen/navigator_screen.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/navigator_screen/navigator_screen.vm.dart';
 
 part 'app_routes.dart';
 
@@ -11,9 +13,12 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.splashScreen,
-      page: () => SplashScreenView(),
-      binding: SplashScreenBinding(),
-    ),
+        name: _Paths.splashScreen,
+        page: () => NavigatorView(),
+        binding: NavigatorBinding()),
+    GetPage(
+        name: '/tabBar',
+        page: () => TabBarDogView(),
+        binding: TabBarDogBinding()),
   ];
 }
