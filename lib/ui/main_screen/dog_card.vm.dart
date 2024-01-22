@@ -18,6 +18,12 @@ class DogCardViewModel extends BaseController {
       FirebaseFirestore.instance.collection('dog');
   RxList<DogInstance> dogList = <DogInstance>[].obs;
   ApiRepository repoFirebase = ApiRepository();
+  RxString? selectedSearchType = 'all'.obs;
+  RxString searchQuery = ''.obs;
+
+  RxString dadSearchQuery = ''.obs;
+
+  RxString momSearchQuery = ''.obs;
 
   init() {
     loadDogData();
@@ -25,6 +31,16 @@ class DogCardViewModel extends BaseController {
 
   loadDogData() async {
     dogList.value = await repoFirebase.dogData();
+  }
+
+  void debouncedSearch(String value) {
+    if (selectedSearchType?.value == 'all') {
+      searchQuery.value = value;
+    } else if (selectedSearchType?.value == 'father') {
+      dadSearchQuery.value = value;
+    } else if (selectedSearchType?.value == 'mother') {
+      momSearchQuery.value = value;
+    }
   }
 
   delete(String id) async {

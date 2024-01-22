@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
-import 'package:getx_mvvm_boilerplate/ui/main_screen/detection.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/main_screen/select_detection.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/dog_card.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/profile_user.view.dart';
 
@@ -15,22 +15,15 @@ class NavigatorBinding extends Bindings {
 }
 
 class NavigatorViewModel extends BaseController {
-  late PageController pageController;
+  var selectIndex = 0.obs;
+
   List<Widget> tapList = [
     DogCard(),
-    DetectionView(),
+    SelectDetectionView(),
     ProfileUserView(),
   ];
 
-  var selectIndex = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-    pageController = PageController();
-  }
-
   navigatorBottom(int index) {
     selectIndex.value = index;
-    pageController.jumpToPage(index);
   }
 }

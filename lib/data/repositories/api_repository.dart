@@ -28,6 +28,8 @@ class ApiRepository {
         etc: dog['etc'],
         dad: dog['dad'],
         mom: dog['mom'],
+        height: dog['height'],
+        weight: dog['height'],
         profileImage: dog['image_profile'],
       );
     }).toList();
@@ -54,7 +56,44 @@ class ApiRepository {
       etc: getDog['etc'],
       dad: getDog['dad'],
       mom: getDog['mom'],
+      height: getDog['height'],
+      weight: getDog['height'],
       profileImage: getDog['image_profile'],
     );
+  }
+
+  Future<List<DogInstance>> dogImages(String dogId) async {
+    QuerySnapshot querySnapshot = await _service.getImagesDog(dogId);
+    return querySnapshot.docs.map((image) {
+      List<String> imageList = (image['images'] as List<dynamic>)
+          .map((dynamic value) => value.toString())
+          .toList();
+      List<Photos> photoList = [
+        Photos(
+          age: image['description'],
+          images: imageList,
+          docId: image.id,
+        )
+      ];
+      return DogInstance(
+        image.id,
+        images: photoList,
+      );
+    }).toList();
+  }
+
+  Future<List<DogInstance>> dogVaccine(String dogId) async {
+    QuerySnapshot querySnapshot = await _service.getVaccineDog(dogId);
+    return querySnapshot.docs.map((vaccine) {
+      List<Vaccine> vaccineList = [
+        Vaccine(
+          date: vaccine['date'],
+          images: vaccine['image'],
+          vaccineType: vaccine['vaccine'],
+          docId: vaccine.id,
+        ),
+      ];
+      return DogInstance(vaccine.id, vaccine: vaccineList);
+    }).toList();
   }
 }

@@ -4,16 +4,16 @@ import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
 import 'package:tflite/tflite.dart';
 
-class DetectionBinding extends Bindings {
+class SelectDetectionBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<DetectionViewModel>(
-      () => DetectionViewModel(),
+    Get.lazyPut<SelectDetectionVM>(
+      () => SelectDetectionVM(),
     );
   }
 }
 
-class DetectionViewModel extends BaseController {
+class SelectDetectionVM extends BaseController {
   RxBool loading = true.obs;
   Rx<File?> image = Rx<File?>(null);
   RxList<dynamic> output = <dynamic>[].obs;

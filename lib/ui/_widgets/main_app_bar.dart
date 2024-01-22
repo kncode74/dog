@@ -5,8 +5,17 @@ class MainAppBar {
   final double? elevation;
   String? images;
   List<Widget>? actions;
+  Function()? onTap;
+  String? textOnTap;
 
-  MainAppBar({this.title, this.elevation, this.images, this.actions});
+  MainAppBar({
+    this.title,
+    this.elevation,
+    this.images,
+    this.actions,
+    this.onTap,
+    this.textOnTap,
+  });
 
   TextStyle get colorWhite => const TextStyle(color: Colors.white);
 
@@ -54,5 +63,20 @@ class MainAppBar {
               bottomLeft: Radius.circular(10)),
         ),
         actions: actions,
+      );
+
+  AppBar get editAppbar => AppBar(
+        centerTitle: true,
+        backgroundColor: const Color.fromRGBO(83, 129, 36, 1),
+        title: _titleMain(title ?? ''),
+        actions: [
+          TextButton(
+            onPressed: onTap,
+            child: Text(
+              textOnTap ?? '',
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
       );
 }

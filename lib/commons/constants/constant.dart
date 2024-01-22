@@ -11,3 +11,8 @@ class ServerType {
   static const devLocal = 'Dev Local';
   static const production = 'Production';
 }
+
+class DogDetection {
+  static const face = 1;
+  static const nose = 2;
+}
