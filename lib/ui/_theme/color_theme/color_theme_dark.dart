@@ -13,4 +13,7 @@ class ColorThemeDark extends ColorTheme {
 
   @override
   Color get secondaryTextColor => const Color(0xFFBDBDBD);
+
+  @override
+  Color get dividerColor => const Color(0xFFEAEAEA);
 }

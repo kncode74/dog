@@ -1,12 +1,12 @@
+import 'dart:ffi';
+
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
-import 'package:getx_mvvm_boilerplate/assets/r.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/main_app_bar.dart';
 import 'package:getx_mvvm_boilerplate/ui/add_data/add_data.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/add_data/add_data.vm.dart';
-import 'package:getx_mvvm_boilerplate/ui/dog_data/dog_data.view.dart';
-import 'package:getx_mvvm_boilerplate/ui/dog_data/dog_data.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/dog_card.vm.dart';
@@ -17,17 +17,20 @@ class DogCard extends BaseView<DogCardViewModel> {
     controller.init();
   }
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget render(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(title: 'Data dog', actions: [
         TextButton(
             onPressed: () {
-              Get.to(AddDataDog(),
-                  binding: AddDataBinding(),
-                  arguments: {'sgm': 'dddd'})?.then((_) {
-                controller.loadDogData();
-              });
+              Get.to(
+                AddDataDog(),
+                binding: AddDataBinding(),
+              )?.then(
+                (_) => controller.loadDogData(),
+              );
             },
             child: const Icon(
               Icons.add,
@@ -35,27 +38,100 @@ class DogCard extends BaseView<DogCardViewModel> {
             ))
       ]).defaultAppbar,
       body: Obx(() {
-        return ListView.builder(
-          itemCount: controller.dogList.length,
-          itemBuilder: (context, index) {
-            var dog = controller.dogList[index];
-            return InkWell(
-              onTap: () async {
-                await Get.to(
-                  () => TabBarDogView(),
-                  binding: TabBarDogBinding(),
-                  arguments: {"dogId": dog.docId},
-                );
-              },
-              child: _listDog(
-                dog.profileImage ?? '',
-                dog.id,
-                dog.status,
-                dog.species,
-                dog.sex,
+        return Column(
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 80,
+                  child: DropdownButtonFormField<String>(
+                    value: controller.selectedSearchType?.value,
+                    onChanged: (value) {
+                      controller.selectedSearchType?.value = value ?? '';
+                      searchController.clear();
+                    },
+                    items: const [
+                      DropdownMenuItem<String>(
+                        value: 'all',
+                        child: Text('ทั้งหมด'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'father',
+                        child: Text('ลูกพ่อ'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'mother',
+                        child: Text('ลูกแม่'),
+                      ),
+                    ],
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'ค้นหาด้วยรหัสสุนัข',
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                searchController.clear();
+                                controller.debouncedSearch('');
+                              },
+                              child: const Icon(Icons.cancel),
+                            ),
+                          ),
+                          onChanged: (val) {
+                            EasyDebounce.debounce(
+                              'searchDebounce', // debounce identifier
+                              const Duration(
+                                  milliseconds: 500), // debounce duration
+                              () => controller.debouncedSearch(
+                                  val), // function to be executed
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.dogList.length,
+                itemBuilder: (context, index) {
+                  var dog = controller.dogList[index];
+
+                  return InkWell(
+                    onTap: () async {
+                      await Get.to(
+                        () => TabBarDogView(),
+                        binding: TabBarDogBinding(),
+                        arguments: {"dogId": dog.docId},
+                      )!
+                          .then(
+                        (value) => controller.init(),
+                      );
+                    },
+                    child: _listDog(
+                      dog.profileImage ?? '',
+                      dog.id,
+                      dog.status,
+                      dog.species,
+                      dog.sex,
+                    ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ],
         );
       }),
     );

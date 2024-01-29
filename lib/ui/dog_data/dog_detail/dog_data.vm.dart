@@ -8,11 +8,17 @@ import 'package:getx_mvvm_boilerplate/ui/null_helper.dart';
 class DogDataBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<DogDataViewModel>(
-      () => DogDataViewModel(),
-      fenix: true
-    );
+    Get.lazyPut<DogDataViewModel>(() => DogDataViewModel(), fenix: true);
   }
 }
 
-class DogDataViewModel extends BaseController {}
+class DogDataViewModel extends BaseController {
+  ApiRepository repository = ApiRepository();
+  String id = Get.arguments?['dogId'] ?? 'NO data';
+  final Rx<DogInstance?> dogDetail = RxNullable<DogInstance?>().setNull();
+
+  init() async {
+    dogDetail.value = await repository.dogDetailData(id);
+    print(dogDetail.value);
+  }
+}

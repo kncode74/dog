@@ -43,22 +43,22 @@ class AddDataDog extends BaseView<AddDataDogViewModel> {
                     .textFormFieldPrice,
                 TextFormFieldTheme(
                         controller: colorController,
-                        listFordropdown: ChoiceData.color,
+                        listForDropdown: ChoiceData.color,
                         hintText: 'color')
                     .dropdownButtonFormField,
                 TextFormFieldTheme(
                         controller: sexController,
-                        listFordropdown: ChoiceData.sex,
+                        listForDropdown: ChoiceData.sex,
                         hintText: 'sex')
                     .dropdownButtonFormField,
                 TextFormFieldTheme(
                         controller: statusController,
-                        listFordropdown: ChoiceData.sell,
+                        listForDropdown: ChoiceData.sell,
                         hintText: 'status')
                     .dropdownButtonFormField,
                 TextFormFieldTheme(
                         controller: speciesController,
-                        listFordropdown: ChoiceData.species,
+                        listForDropdown: ChoiceData.species,
                         hintText: 'species')
                     .dropdownButtonFormField,
                 TextFormFieldTheme(
@@ -79,15 +79,19 @@ class AddDataDog extends BaseView<AddDataDogViewModel> {
                 VSpacings.medium,
                 MyButtonTheme(
                         onFunction: () {
-                          if (formKey.currentState!.validate()) {
+                          if (formKey.currentState != null &&
+                              formKey.currentState!.validate()) {
                             controller.saveData(
-                                idController.text,
-                                priceController.text,
-                                colorController.text,
-                                statusController.text,
-                                speciesController.text,
-                                sexController.text,
-                                birthDayController.text);
+                              idController.text,
+                              priceController.text,
+                              colorController.text,
+                              statusController.text,
+                              speciesController.text,
+                              sexController.text,
+                              birthDayController.text,
+                              weightController.text,
+                              heightController.text,
+                            );
                           }
                         },
                         nameButton: 'Done')

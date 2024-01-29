@@ -15,11 +15,19 @@ class AddDataBinding extends Bindings {
 class AddDataDogViewModel extends BaseController {
   CollectionReference dogCollection =
       FirebaseFirestore.instance.collection("dog");
-  String getAgm = Get.arguments['sgm'];
   var selectedValue = 'red'.obs;
 
-  saveData(String id, String price, String color, String status, String species,
-      String sex, String birthDay) async {
+  saveData(
+    String id,
+    String price,
+    String color,
+    String status,
+    String species,
+    String sex,
+    String birthDay,
+    String weight,
+    String height,
+  ) async {
     Map<String, dynamic> dog = {
       'id': id,
       'price': price,
@@ -34,10 +42,11 @@ class AddDataDogViewModel extends BaseController {
       'out': '',
       'dad': '',
       'mom': '',
-      'etc': ''
+      'etc': '',
+      'weight': weight,
+      'height': height,
     };
-    await dogCollection.doc().set(dog);
-    print(getAgm);
+    await dogCollection.doc(id).set(dog);
     Get.back();
   }
 }
