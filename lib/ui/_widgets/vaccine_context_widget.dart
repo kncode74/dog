@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/assets/image.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
 import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/cached_network_image_widget.dart';
 

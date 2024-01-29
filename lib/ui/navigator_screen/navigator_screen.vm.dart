@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/select_detection.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/dog_card.view.dart';
-import 'package:getx_mvvm_boilerplate/ui/main_screen/profile_user.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/main_screen/user/profile_user.view.dart';
 
 class NavigatorBinding extends Bindings {
   @override

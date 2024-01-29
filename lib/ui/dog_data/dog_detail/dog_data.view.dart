@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/i18n.dart';
 import 'package:getx_mvvm_boilerplate/models/dog.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/diaLog.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_card.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/document_content.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_widget/general_text_content.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/dog_detail/dog_data.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/dog_detail/edit_dog/edit_dog.view.dart';
@@ -23,7 +26,7 @@ class DogData extends BaseView<DogDataViewModel> {
   @override
   Widget render(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(248, 247, 247, 1),
+      backgroundColor: ThemeData().background1(),
       body: SingleChildScrollView(
         child: Obx(
           () => _content(),
@@ -34,24 +37,12 @@ class DogData extends BaseView<DogDataViewModel> {
 
   Widget _content() {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Row(
-                  children: [Text('Profile')],
-                ),
+      child: DocumentCard(
+        widget: Column(
+          children: [
+            DocumentContent(
+              title: i18n.personalInformation.tr,
+              widgetList: [
                 GeneralTextContent(
                   i18n.status,
                   controller.dogDetail.value?.status ?? '',
@@ -74,13 +65,9 @@ class DogData extends BaseView<DogDataViewModel> {
                 ),
               ],
             ),
-          ),
-          DocumentCard(
-            widget: Column(
-              children: [
-                Row(
-                  children: [Text('Information')],
-                ),
+            DocumentContent(
+              title: i18n.information.tr,
+              widgetList: [
                 GeneralTextContent(
                   i18n.birthDay,
                   controller.dogDetail.value?.birth ?? '',
@@ -99,25 +86,10 @@ class DogData extends BaseView<DogDataViewModel> {
                 ),
               ],
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: 20,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Take - Out'), Icon(Icons.edit)],
-                ),
+            DocumentContent(
+              title: '${i18n.take.tr}- ${i18n.out.tr}',
+              isLast: true,
+              widgetList: [
                 GeneralTextContent(
                   i18n.take,
                   controller.dogDetail.value?.take ?? '',
@@ -128,8 +100,8 @@ class DogData extends BaseView<DogDataViewModel> {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

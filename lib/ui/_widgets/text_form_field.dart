@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 
 class TextFormFieldTheme {
@@ -11,6 +14,7 @@ class TextFormFieldTheme {
   String? hintText;
   BuildContext? context;
   bool haveValue;
+  bool isOutline;
 
   TextFormFieldTheme({
     this.keyboardType,
@@ -21,13 +25,24 @@ class TextFormFieldTheme {
     this.hintText,
     this.context,
     this.haveValue = false,
+    this.isOutline = false,
   });
 
   TextFormField get defaultTextFormField => TextFormField(
         keyboardType: keyboardType,
         controller: controller,
         decoration: InputDecoration(
+          border: isOutline
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: ThemeData().mainColor(),
+                  ),
+                )
+              : null,
           labelText: labels,
+          hintText: hintText,
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -44,7 +59,19 @@ class TextFormFieldTheme {
           LengthLimitingTextInputFormatter(15),
           ThousandsFormatter(),
         ],
-        decoration: InputDecoration(labelText: labels),
+        decoration: InputDecoration(
+          border: isOutline
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: ThemeData().mainColor(),
+                  ),
+                )
+              : null,
+          labelText: labels,
+          hintText: hintText,
+        ),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return textWarning;
@@ -61,8 +88,17 @@ class TextFormFieldTheme {
           ThousandsFormatter(allowFraction: true),
         ],
         decoration: InputDecoration(
-          labelText: labels,
-        ),
+            border: isOutline
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: ThemeData().mainColor(),
+                    ),
+                  )
+                : null,
+            labelText: labels,
+            hintText: hintText),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return textWarning;
@@ -73,7 +109,6 @@ class TextFormFieldTheme {
 
   DropdownButtonFormField<String> get dropdownButtonFormField =>
       DropdownButtonFormField(
-        // value: haveValue  ? controller.text : null,
         items: listForDropdown?.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -83,20 +118,43 @@ class TextFormFieldTheme {
         onChanged: (String? newValue) {
           controller.text = newValue!;
         },
+        decoration: InputDecoration(
+          border: isOutline
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: ThemeData().mainColor(),
+                  ),
+                )
+              : null,
+        ),
         hint: Text(hintText ?? ''),
+        icon: SvgPicture.asset(icon.arrow),
       );
 
   TextFormField get textFormFieldForBirthDay => TextFormField(
         controller: controller,
         decoration: InputDecoration(
-            labelText: labels,
-            suffixIcon: IconButton(
-              onPressed: () => _selectDateFromPicker(),
-              icon: const Icon(Icons.calendar_today_outlined),
-            )),
+          border: isOutline
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: ThemeData().mainColor(),
+                  ),
+                )
+              : null,
+          labelText: labels,
+          hintText: hintText,
+          suffixIcon: IconButton(
+            onPressed: () => selectDateFromPicker(),
+            icon: SvgPicture.asset(icon.calendar),
+          ),
+        ),
       );
 
-  Future<void> _selectDateFromPicker() async {
+  Future<void> selectDateFromPicker() async {
     final DateTime? picked = await showDatePicker(
       context: context!,
       initialDate: DateTime(DateTime.now().year - 0),

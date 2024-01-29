@@ -3,14 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/i18n.dart';
+import 'package:getx_mvvm_boilerplate/commons/constants/ui_constants.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/cached_network_image_widget.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_card.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/document_content.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_widget/image.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/dog_pedigree.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/edit_pedigree/edit_pedigree.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/edit_pedigree/edit_pedigree.vm.dart';
 import 'package:image_picker/image_picker.dart';
 
+// TODO รับสายพันธุ์ผ่าน argument
 class DogPedigreeView extends BaseView<DogPedigreeVM> {
   DogPedigreeView() : super() {
     Get.put(DogPedigreeVM());
@@ -23,51 +29,106 @@ class DogPedigreeView extends BaseView<DogPedigreeVM> {
     print(controller.dogDetail.value?.pedigree ?? '');
   }
 
+  Widget _listContent(
+    String title,
+    String id,
+    String breed,
+    String sex,
+  ) {
+    return Container(
+      margin: EdgeInsets.only(left: 25, right: 25),
+      height: 80,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          width: 1,
+          color: ThemeData().secondColor(),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            SizedBox(width: 10),
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage(icon.nose),
+            ),
+            SizedBox(width: 30),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${title.tr} : $id',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('$breed , $sex'),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget render(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(248, 247, 247, 1),
+      backgroundColor: ThemeData().background1(),
       body: Obx(() {
-        var dog = controller.dogDetail.value?.pedigree ?? '';
+        var dog = controller.dogDetail.value;
         return SingleChildScrollView(
           child: Column(
             children: [
-              GestureDetector(
-                onTap: () {
-                  _upLoadPedigree(context, dog);
-                },
-                child: DocumentCard(
-                  widget: Container(
-                    margin: EdgeInsets.all(20),
-                    height: 150,
-                    width: 150,
-                    child: Column(
-                      children: [
-                        Image.network(
-                          dog.isNotEmpty ? dog : '',
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
+              DocumentCard(
+                widget: Column(
+                  children: [
+                    DocumentContent(
+                      isLast: true,
+                      title: i18n.dogPedigreeCertificate.tr,
+                      widgetList: [
+                        InkWell(
+                          onTap: () {
+                            _upLoadPedigree(context, dog?.pedigree ?? '');
                           },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
-                              Icons.add_photo_alternate_outlined,
-                              size: 50,
-                            );
-                          },
-                          fit: BoxFit.cover,
+                          child: CachedNetworkImageWidget(
+                              heightPlace: 150,
+                              imageUrl: dog?.pedigree ?? '',
+                              imageDefaultUrl: icon.placeHolder),
                         ),
                       ],
                     ),
-                  ),
+                    _listContent(
+                      i18n.dad,
+                      dog?.dad ?? '',
+                      i18n.yorkshireTerrier.tr,
+                      i18n.female.tr,
+                    ),
+                    VSpacings.small,
+                    _listContent(
+                      i18n.mom,
+                      dog?.mom ?? '',
+                      i18n.yorkshireTerrier,
+                      i18n.female,
+                    )
+                  ],
                 ),
               ),
-              _listdog(controller.dogDetail.value?.dad ?? ''),
-              _listdog(controller.dogDetail.value?.mom ?? ''),
             ],
           ),
         );

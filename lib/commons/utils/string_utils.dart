@@ -4,8 +4,18 @@ extension StringUtil on String {
     for (var i = 0; i < length; i += size) {
       chunks.add(substring(i, i + size > length ? length : i + size));
     }
-    return chunks
-    ;
+    return chunks;
+  }
+
+  String getLocaleText() {
+    switch (this) {
+      case 'en':
+        return 'English';
+      case 'th':
+        return 'ไทย';
+      default:
+        return '';
+    }
   }
 }
 
@@ -14,4 +24,3 @@ extension StringOptionalUtil on String? {
     return this == null || this == '';
   }
 }
-

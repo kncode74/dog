@@ -39,9 +39,27 @@ extension AppThemeExt on ThemeData {
         ? ColorThemeDark().primaryTextColor
         : ColorThemeLight().primaryTextColor;
   }
+
   Color divider() {
     return Get.isDarkMode
         ? ColorThemeDark().dividerColor
         : ColorThemeLight().dividerColor;
+  }
+
+  Color mainColor() {
+    return Get.isDarkMode
+        ? ColorThemeDark().mainColor
+        : ColorThemeLight().mainColor;
+  }
+  Color secondColor() {
+    return Get.isDarkMode
+        ? ColorThemeDark().secondColor
+        : ColorThemeLight().secondColor;
+  }
+
+  Color background1() {
+    return Get.isDarkMode
+        ? ColorThemeDark().background1
+        : ColorThemeLight().background1;
   }
 }

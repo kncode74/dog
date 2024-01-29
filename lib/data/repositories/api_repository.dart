@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:getx_mvvm_boilerplate/models/dog.dart';
+import 'package:getx_mvvm_boilerplate/models/farm.dart';
 import 'package:tflite/tflite.dart';
 
 import '../../di/container.dart';
@@ -60,6 +61,26 @@ class ApiRepository {
       weight: getDog['height'],
       profileImage: getDog['image_profile'],
     );
+  }
+
+  Future<Farm> farmDetail(String email) async {
+    DocumentSnapshot<Map<String, dynamic>> getDog =
+        await _service.getDetailUser(email);
+
+    return Farm(
+        address: getDog['adress'],
+        city: getDog['city'],
+        district: getDog['district'],
+        email: getDog['email'],
+        line: getDog['line'],
+        facebook: getDog['facebook'],
+        etc: getDog['etc'],
+        farmName: getDog['farm_name'],
+        image: getDog['image'],
+        name: getDog['name'],
+        phoneNumber: getDog['phone_number'],
+        timeOpen: getDog['time_open'],
+        timeClose: getDog['time_open']);
   }
 
   Future<List<DogInstance>> dogImages(String dogId) async {

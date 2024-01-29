@@ -15,21 +15,40 @@ class TabBarDogBinding extends Bindings {
 }
 
 class TabbarDogVM extends BaseController {
-  Rx<DogInstance? >dogList = RxNullable<DogInstance>().setNull();
-
-  ApiRepository repository = ApiRepository();
-
+  Rx<DogInstance?> dogDetail = RxNullable<DogInstance>().setNull();
+  RxList<DogInstance> dogList = <DogInstance>[].obs;
+  ApiRepository _repository = ApiRepository();
+  RxList<DogInstance> filterDog = <DogInstance>[].obs;
   String id = Get.arguments?['dogId'] ?? 'NO data';
 
-  init() {
-    loadDogData();
+  init() async {
+    _loadDogData();
+    await _loadDogList();
+    filterDogList();
   }
 
-  loadDogData() async {
+  _loadDogList() async {
+    dogList.value = await _repository.dogData();
+  }
+
+  _loadDogData() async {
     try {
-      dogList.value = await repository.dogDetailData(id);
+      dogDetail.value = await _repository.dogDetailData(id);
     } catch (e) {
       print('Error fetching dog data: $e');
     }
+  }
+
+  filterDogList() {
+    final sameBreed = dogDetail.value?.species ?? '';
+    final sameColor = dogDetail.value?.color ?? '';
+    final sameSex = dogDetail.value?.sex ?? '';
+    filterDog.value = dogList
+        .where((dog) =>
+            dog.species == sameBreed &&
+            dog.color == sameColor &&
+            dog.sex == sameSex)
+        .toList();
+    filterDog.value.removeWhere((dog) => dog.id == dogDetail.value?.id);
   }
 }

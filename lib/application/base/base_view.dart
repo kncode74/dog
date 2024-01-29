@@ -7,10 +7,17 @@ abstract class BaseView<Controller extends BaseController>
     extends GetView<Controller> implements LifeCycleListener {
   Widget render(BuildContext context);
 
+  final _ContextHolder _contextHolder = _ContextHolder();
+
   bool isInitial = false;
+
+  BaseView({super.key});
+
+  BuildContext? get context => _contextHolder.context;
 
   @override
   Widget build(BuildContext context) {
+    _contextHolder.context = context;
     Future.delayed(const Duration(seconds: 0), () {
       if (!isInitial) {
         onInit();
@@ -47,4 +54,8 @@ abstract class BaseView<Controller extends BaseController>
   Widget loading() {
     return Container();
   }
+}
+
+class _ContextHolder {
+  BuildContext? context;
 }

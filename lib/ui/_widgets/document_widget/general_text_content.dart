@@ -26,21 +26,25 @@ class GeneralTextContent extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   '${title.tr} :',
-                  style: TextStyle(fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
+                  ),
                 ),
               ),
               HSpacings.xxxSmall,
               Expanded(
                 flex: 3,
-                child: detail!.isEmpty ? const Text('-') : Text(detail ?? ''),
+                child: detail!.isEmpty
+                    ? const Text('-')
+                    : Text(
+                        detail ?? '',
+                        style: const TextStyle(fontSize: 15),
+                      ),
               ),
             ],
           ),
-          Divider(
-            height: 32,
-            thickness: 1.0,
-            color: ThemeData().divider(),
-          ),
+          VSpacings.xxxSmall,
         ],
       ),
     );

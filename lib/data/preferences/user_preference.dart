@@ -4,6 +4,7 @@ class UserPreference {
   static const prefToken = "token";
   static const prefUserId = "userId";
   static const prefIsRemember = "isRemember";
+  static const prefLanguageCode = "languageCode";
 
   UserPreference();
 
@@ -15,6 +16,11 @@ class UserPreference {
   Future<int?> getUserId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt(prefUserId);
+  }
+
+  Future<String?> getLanguageCode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(prefLanguageCode);
   }
 
   Future<bool?> isRemember() async {
@@ -35,5 +41,10 @@ class UserPreference {
   setRemember(bool value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(prefIsRemember, value);
+  }
+
+  setLanguageCode(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(prefLanguageCode, value);
   }
 }

@@ -1,152 +1,165 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
-import 'package:getx_mvvm_boilerplate/ui/_widgets/button_style.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
+import 'package:getx_mvvm_boilerplate/commons/constants/i18n.dart';
+import 'package:getx_mvvm_boilerplate/commons/constants/ui_constants.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/main_app_bar.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/detection_dog/detection_dog.vm.dart';
-import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.view.dart';
-import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.vm.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tflite/tflite.dart';
 
 class DetectionDogView extends BaseView<DetectionDogVM> {
-  final ImagePicker _imagePicker = ImagePicker();
-
   @override
   void onInit() {
     super.onInit();
-    loadModel();
-  }
-
-  Future<void> loadModel() async {
-    if (controller.dogType == 1) {
-      await Tflite.loadModel(
-        model: 'assets/model_unquant.tflite',
-        labels: 'assets/labels.txt',
-      );
-      controller.isLoading.value = false;
-    } else {
-      await Tflite.loadModel(
-        model: 'assets/nose.tflite',
-        labels: 'assets/nose.txt',
-      );
-      controller.isLoading.value = false;
-    }
-  }
-
-  Future<void> pickImage() async {
-    var pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedImage == null) return;
-
-    controller.isLoading.value = true;
-    controller.image.value = File(pickedImage.path);
-    print('image ${controller.image.value}');
-    await classifyImage(controller.image.value!);
-  }
-
-  Future<void> classifyImage(File image) async {
-    var outputResult = await Tflite.runModelOnImage(
-      path: image.path,
-      numResults: 2,
-      threshold: 0.5,
-      imageMean: 127.5,
-      imageStd: 127.5,
-    );
-
-    controller.output.value = outputResult ?? [];
-    controller.isLoading.value = false;
-    await Future.delayed(const Duration(seconds: 1));
-
-    print('Output: $outputResult');
-  }
-
-  void clickAndShow() {
-    String idDog = controller.output[0]['label'].split(' ')[1];
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection('dog').doc(idDog);
-    documentReference.get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        Get.to(
-          TabBarDogView(),
-          arguments: {'dogId': idDog},
-          binding: TabBarDogBinding(),
-        );
-      } else {}
-    }).catchError((error) {});
+    controller.init();
   }
 
   @override
   Widget render(BuildContext context) {
     return Scaffold(
       appBar: controller.dogType == 1
-          ? MainAppBar(title: "Dog Face", images: 'images/nose.jpg')
-              .detectionAppbar
-          : MainAppBar(title: "Dog Nose", images: 'images/face.jpg')
-              .detectionAppbar,
+          ? MainAppBar(
+        title: "Dog Face",
+        images: icon.nose,
+      ).detectionAppbar
+          : MainAppBar(
+        title: "Dog Nose",
+        images: icon.face,
+      ).detectionAppbar,
       body: Column(
         children: [
           Obx(
-            () => controller.isLoading.value
+                () =>
+            controller.isLoading.value
                 ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+              child: CircularProgressIndicator(),
+            )
                 : SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        controller.image?.value == null
-                            ? Container()
-                            : SizedBox(
-                                height: 300,
-                                width: 300,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: controller.image?.value != null
-                                      ? Image.file(
-                                          controller.image.value!,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Container(),
-                                ),
-                              ),
-                        controller.output.value.isNotEmpty
-                            ? InkWell(
-                                onTap: () {
-                                  clickAndShow();
-                                },
-                                child: Text(
-                                  'ID : ${controller.output[0]['label'].split(' ')[1]}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              )
-                            : Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [Text('search dog')],
-                                ),
-                              )
-                      ],
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  controller.image?.value == null
+                      ? Container()
+                      : SizedBox(
+                    height: 300,
+                    width: 300,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: controller.image?.value != null
+                          ? Image.file(
+                        controller.image.value!,
+                        fit: BoxFit.cover,
+                      )
+                          : Container(),
                     ),
                   ),
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
-                    onPressed: () async {
-                      await pickImage();
+                  controller.output.value.isNotEmpty
+                      ? InkWell(
+                    onTap: () {
+                      controller.clickAndShow();
                     },
-                    child: Text('camera'))
-              ],
+                    child: Text(
+                      'ID : ${controller.output[0]['label'].split(' ')[1]}',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                  )
+                      : Center(child: _placeDetection())
+                ],
+              ),
+            ),
+          ),
+          _button(),
+        ],
+      ),
+    );
+  }
+
+  Widget _placeDetection() {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Container(
+              height: 380,
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: AssetImage(
+                      controller.dogType == 1 ? icon.nose : icon.face),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Text(i18n.search.tr)
+          ],
+        ),
+        Positioned(
+          left: 40,
+          top: 45,
+          child: SvgPicture.asset(icon.scan),
+        ),
+      ],
+    );
+  }
+
+  Widget _button() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: ThemeData().secondColor(),
+                ),
+              ),
+              onPressed: () async {
+                await controller.pickImage();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(icon.gallery),
+                  HSpacings.xxxSmall,
+                  Text(
+                    i18n.gallery.tr,
+                    style: TextStyle(
+                      color: ThemeData().secondColor(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          HSpacings.medium,
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: ThemeData().secondColor()),
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(icon.camera),
+                  HSpacings.xxxSmall,
+                  Text(
+                    i18n.camera.tr,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/select_detection.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/main_screen/dog_card.view.dart';
-import 'package:getx_mvvm_boilerplate/ui/main_screen/profile_user.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/navigator_screen/navigator_screen.vm.dart';
 
 class NavigatorView extends BaseView<NavigatorViewModel> {
@@ -17,21 +17,21 @@ class NavigatorView extends BaseView<NavigatorViewModel> {
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
-              'images/bottom1.png',
+              icon.bottom1,
               height: 36,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'images/bottom2.png',
+              icon.bottom2,
               height: 36,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'images/bottom3.png',
+              icon.bottom3,
               height: 36,
             ),
             label: '',

@@ -1,4 +1,4 @@
-import 'package:cm_mobile/ui/_theme/app_theme.dart';
+
 import 'package:flutter/material.dart';
 
 class IconSize {
@@ -47,50 +47,50 @@ class AppBorderRadius {
   static BorderRadius get large => BorderRadius.circular(Dimen.large);
 }
 
-class AppDecoration {
-  static BoxDecoration get decoration1 => BoxDecoration(
-        borderRadius: AppBorderRadius.xxSmall,
-        border: Border.all(
-          width: 1.5,
-          color: ThemeData().background3(),
-        ),
-      );
+// class AppDecoration {
+//   static BoxDecoration get decoration1 => BoxDecoration(
+//         borderRadius: AppBorderRadius.xxSmall,
+//         border: Border.all(
+//           width: 1.5,
+//           color: ThemeData().background3(),
+//         ),
+//       );
 
-  static BoxDecoration get decoration2 => BoxDecoration(
-        color: ThemeData().background(),
-        borderRadius: AppBorderRadius.xxSmall,
-        boxShadow: [
-          AppBorderShadow.shadow2,
-        ],
-      );
+//   static BoxDecoration get decoration2 => BoxDecoration(
+//         color: ThemeData().background(),
+//         borderRadius: AppBorderRadius.xxSmall,
+//         boxShadow: [
+//           AppBorderShadow.shadow2,
+//         ],
+//       );
 
-  static BoxDecoration get fileDecoration => BoxDecoration(
-        borderRadius: AppBorderRadius.xxSmall,
-        color: ThemeData().blue().withOpacity(0.15),
-      );
+//   static BoxDecoration get fileDecoration => BoxDecoration(
+//         borderRadius: AppBorderRadius.xxSmall,
+//         color: ThemeData().blue().withOpacity(0.15),
+//       );
 
-  static BoxDecoration get card => BoxDecoration(
-        color: ThemeData().background(),
-        borderRadius: AppBorderRadius.xxSmall,
-        boxShadow: [
-          AppBorderShadow.shadow1,
-        ],
-      );
-}
+//   static BoxDecoration get card => BoxDecoration(
+//         color: ThemeData().background(),
+//         borderRadius: AppBorderRadius.xxSmall,
+//         boxShadow: [
+//           AppBorderShadow.shadow1,
+//         ],
+//       );
+// }
 
-class AppBorderShadow {
-  static get shadow1 => BoxShadow(
-        color: ThemeData().border(),
-        spreadRadius: 2,
-        blurRadius: 4,
-      );
+// class AppBorderShadow {
+//   static get shadow1 => BoxShadow(
+//         color: ThemeData().border(),
+//         spreadRadius: 2,
+//         blurRadius: 4,
+//       );
 
-  static get shadow2 => BoxShadow(
-        color: ThemeData().border(),
-        spreadRadius: 1,
-        blurRadius: 0,
-      );
-}
+//   static get shadow2 => BoxShadow(
+//         color: ThemeData().border(),
+//         spreadRadius: 1,
+//         blurRadius: 0,
+//       );
+// }
 
 class Spacing {
   // === All ===

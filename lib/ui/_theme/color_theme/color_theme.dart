@@ -5,4 +5,7 @@ abstract class ColorTheme {
   Color get secondaryColor;
   Color get primaryTextColor;
   Color get secondaryTextColor;
+  Color get mainColor;
+  Color get secondColor;
+  Color get background1;
 }

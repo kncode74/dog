@@ -1,5 +1,6 @@
-import 'package:cm_mobile/ui/_theme/app_theme.dart';
+
 import 'package:flutter/material.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 
 class LoadingIndicator extends StatelessWidget {
   final Alignment alignment;

@@ -14,6 +14,7 @@ class CachedNetworkImageWidget extends StatelessWidget {
   final Widget? placeHolder;
   final Widget? errorWidget;
   final bool isLocalImage;
+  final double? heightPlace;
 
   const CachedNetworkImageWidget({
     super.key,
@@ -28,13 +29,14 @@ class CachedNetworkImageWidget extends StatelessWidget {
     this.placeHolder,
     this.errorWidget,
     this.isLocalImage = false,
+    this.heightPlace,
   });
 
   Widget imagePlaceHolder() {
     return SvgPicture.asset(
       imageDefaultUrl,
       fit: placeHolderBoxFit,
-      height: height,
+      height: heightPlace,
       width: width,
     );
   }

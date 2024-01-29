@@ -1,3 +1,5 @@
+import 'package:getx_mvvm_boilerplate/models/language.dart';
+
 class ClientKeyPath {
   static const demo = 'demo_client_key';
   static const dev = 'dev_client_key';
@@ -16,3 +18,8 @@ class DogDetection {
   static const face = 1;
   static const nose = 2;
 }
+
+List<Language> localeList = [
+  Language.init(label: 'en', value: 0),
+  Language.init(label: 'th', value: 1),
+];

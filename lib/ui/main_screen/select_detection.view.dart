@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/argument_key.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/constant.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/i18n.dart';
@@ -20,7 +21,7 @@ class SelectDetectionView extends BaseView<SelectDetectionVM> {
   Widget render(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MainAppBar(title: 'Detection').defaultAppbar,
+      appBar: MainAppBar(title: 'Detection').mainAppbar,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -39,7 +40,7 @@ class SelectDetectionView extends BaseView<SelectDetectionVM> {
               child: ContentDetection(
                 title: i18n.dogFace.tr,
                 subTitle: i18n.dogFacePicture.tr,
-                image: 'images/nose.jpg',
+                image: icon.nose,
               ),
             ),
             InkWell(
@@ -55,7 +56,7 @@ class SelectDetectionView extends BaseView<SelectDetectionVM> {
               child: ContentDetection(
                 title: i18n.dogNose.tr,
                 subTitle: i18n.dogNosePicture.tr,
-                image: 'images/face.jpg',
+                image:icon.face,
               ),
             )
           ],

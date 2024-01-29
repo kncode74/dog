@@ -31,4 +31,9 @@ class ApiService {
         .collection('vaccine')
         .get();
   }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getDetailUser(
+      String email) async {
+    return await FirebaseFirestore.instance.collection('farm').doc(email).get();
+  }
 }

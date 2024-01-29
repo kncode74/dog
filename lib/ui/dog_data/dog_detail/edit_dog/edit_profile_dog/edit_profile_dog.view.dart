@@ -4,6 +4,7 @@ import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/i18n.dart';
 import 'package:getx_mvvm_boilerplate/models/data_dropdown.dart';
 import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/document_widget/general_form_content.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/main_app_bar.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/text_form_field.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/dog_detail/edit_dog/edit_profile_dog/edit_profile_dog.vm.dart';
@@ -41,59 +42,39 @@ class EditProfileDogView extends BaseView<EditProfileDogVM> {
               text: controller.dogDetail.value?.sex ?? '');
           _priceController = TextEditingController(
               text: controller.dogDetail.value?.price ?? '');
-          return Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  controller.pickImages();
-                },
-                child: profile.isNotEmpty
-                    ? CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(profile),
-                      )
-                    : CircleAvatar(
-                        radius: 50,
-                        backgroundImage: controller.image.value != null
-                            ? FileImage(controller.image.value!)
-                            : null,
-                      ),
-              ),
-              Divider(
-                color: Colors.blue,
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Text('data'),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: TextFormFieldTheme(
-                      controller: _statusController,
-                      listForDropdown: ChoiceData.sell,
-                      hintText: i18n.status.tr,
-                    ).dropdownButtonFormField,
-                  )
-                ],
-              ),
-              TextFormFieldTheme(
-                controller: _speciesController,
-                listForDropdown: ChoiceData.species,
-                hintText: i18n.species.tr,
-              ).dropdownButtonFormField,
-              TextFormFieldTheme(
-                controller: _sexController,
-                listForDropdown: ChoiceData.sex,
-                hintText: i18n.sex.tr,
-              ).dropdownButtonFormField,
-              TextFormFieldTheme(
-                controller: _priceController,
-                hintText: i18n.price.tr,
-              ).textFormFieldPrice,
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    controller.pickImages();
+                  },
+                  child: profile.isNotEmpty
+                      ? CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(profile),
+                        )
+                      : CircleAvatar(
+                          radius: 50,
+                          backgroundImage: controller.image.value != null
+                              ? FileImage(controller.image.value!)
+                              : null,
+                        ),
+                ),
+                Divider(
+                  color: Colors.blue,
+                  height: 30,
+                ),
+                GeneralFormContent(
+                  i18n.status.tr,
+                  TextFormFieldTheme(
+                    controller: _priceController,
+                    hintText: i18n.price.tr,
+                  ).textFormFieldPrice,
+                ),
+              ],
+            ),
           );
         },
       ),

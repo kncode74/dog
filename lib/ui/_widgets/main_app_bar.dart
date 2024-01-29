@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:getx_mvvm_boilerplate/assets/r.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 
 class MainAppBar {
   final String? title;
@@ -37,8 +41,8 @@ class MainAppBar {
 
   AppBar get detectionAppbar => AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
-        title: _titleDefalt(title ?? ''),
+        backgroundColor:ThemeData().mainColor(),
+        title: _titleMain(title ?? ''),
         iconTheme: const IconThemeData(color: Color.fromRGBO(57, 57, 57, 1)),
         actions: [
           Padding(
@@ -51,11 +55,43 @@ class MainAppBar {
             ),
           )
         ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       );
 
   AppBar get defaultAppbar => AppBar(
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(83, 129, 36, 1),
+        backgroundColor: ThemeData().mainColor(),
+        title: _titleMain(title ?? ''),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10)),
+        ),
+        actions: actions,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      );
+
+  AppBar get mainAppbar => AppBar(
+        centerTitle: true,
+        backgroundColor: ThemeData().mainColor(),
         title: _titleMain(title ?? ''),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -67,16 +103,23 @@ class MainAppBar {
 
   AppBar get editAppbar => AppBar(
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(83, 129, 36, 1),
+        backgroundColor: ThemeData().mainColor(),
         title: _titleMain(title ?? ''),
         actions: [
           TextButton(
             onPressed: onTap,
-            child: Text(
-              textOnTap ?? '',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
+            child: SvgPicture.asset(icon.save),
+          ),
         ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       );
 }

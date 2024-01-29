@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 
 class ContentDetection extends StatelessWidget {
   final String title;
@@ -76,10 +77,10 @@ class ContentDetection extends StatelessWidget {
             flex: 1,
             child: Container(
               alignment: Alignment.center,
-              child: const Icon(
+              child:  Icon(
                 Icons.arrow_circle_right,
                 size: 40,
-                color: Colors.blue,
+                color: ThemeData().mainColor(),
               ),
             ),
           ),

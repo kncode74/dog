@@ -16,18 +16,22 @@ class AddDataDogViewModel extends BaseController {
   CollectionReference dogCollection =
       FirebaseFirestore.instance.collection("dog");
   var selectedValue = 'red'.obs;
+  RxInt currentStep = 0.obs;
 
-  saveData(
-    String id,
-    String price,
-    String color,
-    String status,
-    String species,
-    String sex,
-    String birthDay,
-    String weight,
-    String height,
-  ) async {
+  saveData({
+    required String id,
+    required String price,
+    required String color,
+    required String status,
+    required String species,
+    required String sex,
+    required String birthDay,
+    required String weight,
+    required String height,
+    required String dad,
+    required String mom,
+    required String take,
+  }) async {
     Map<String, dynamic> dog = {
       'id': id,
       'price': price,
@@ -38,10 +42,10 @@ class AddDataDogViewModel extends BaseController {
       'birth_day': birthDay,
       'pedigree': '',
       'image_profile': '',
-      'take': '',
+      'take': take,
       'out': '',
-      'dad': '',
-      'mom': '',
+      'dad': dad,
+      'mom': mom,
       'etc': '',
       'weight': weight,
       'height': height,

@@ -9,6 +9,7 @@ class DocumentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(
         left: 20,
         right: 20,
@@ -16,7 +17,7 @@ class DocumentCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: widget,
     );
