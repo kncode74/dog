@@ -6,7 +6,8 @@ class DogInstance {
   final String? sex;
   final String? species;
   final String? status;
-
+  final String? weight;
+  final String? height;
   final String? pedigree;
   final String? take;
   final String? out;
@@ -36,6 +37,8 @@ class DogInstance {
     this.dad,
     this.mom,
     this.profileImage,
+    this.height,
+    this.weight,
   });
 }
 
@@ -43,20 +46,24 @@ class Vaccine {
   String date;
   String images;
   String vaccineType;
+  String docId;
 
   Vaccine({
     required this.date,
     required this.images,
     required this.vaccineType,
+    required this.docId,
   });
 }
 
 class Photos {
   String age;
   List images;
+  String docId;
 
   Photos({
     required this.age,
     required this.images,
+    required this.docId,
   });
 }

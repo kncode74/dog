@@ -10,7 +10,25 @@ class ApiService {
   Future<QuerySnapshot<Object?>> getDog() async {
     return await FirebaseFirestore.instance.collection('dog').get();
   }
-  Future <DocumentSnapshot<Map<String, dynamic>>> getDetailDog(String dogId) async {
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getDetailDog(
+      String dogId) async {
     return await FirebaseFirestore.instance.collection('dog').doc(dogId).get();
+  }
+
+  Future<QuerySnapshot<Object?>> getImagesDog(String dogId) async {
+    return await FirebaseFirestore.instance
+        .collection('dog')
+        .doc(dogId)
+        .collection('images')
+        .get();
+  }
+
+  Future<QuerySnapshot<Object?>> getVaccineDog(String dogId) async {
+    return await FirebaseFirestore.instance
+        .collection('dog')
+        .doc(dogId)
+        .collection('vaccine')
+        .get();
   }
 }

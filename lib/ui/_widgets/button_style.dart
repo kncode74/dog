@@ -9,7 +9,7 @@ class MyButtonTheme {
 
   Widget outlineButton() {
     return OutlinedButton(
-      onPressed: onFunction(),
+      onPressed: onFunction,
       child: Text(nameButton ?? ''),
     );
   }

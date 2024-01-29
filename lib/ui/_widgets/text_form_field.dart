@@ -7,18 +7,21 @@ class TextFormFieldTheme {
   String? labels;
   String? textWarning;
   TextInputType? keyboardType;
-  List<String>? listFordropdown;
+  List<String>? listForDropdown;
   String? hintText;
   BuildContext? context;
+  bool haveValue;
 
-  TextFormFieldTheme(
-      {this.keyboardType,
-      required this.controller,
-      this.labels,
-      this.textWarning,
-      this.listFordropdown,
-      this.hintText,
-      this.context});
+  TextFormFieldTheme({
+    this.keyboardType,
+    required this.controller,
+    this.labels,
+    this.textWarning,
+    this.listForDropdown,
+    this.hintText,
+    this.context,
+    this.haveValue = false,
+  });
 
   TextFormField get defaultTextFormField => TextFormField(
         keyboardType: keyboardType,
@@ -49,6 +52,7 @@ class TextFormFieldTheme {
           return null;
         },
       );
+
   TextFormField get textFieldDecimalSet => TextFormField(
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         controller: controller,
@@ -69,17 +73,19 @@ class TextFormFieldTheme {
 
   DropdownButtonFormField<String> get dropdownButtonFormField =>
       DropdownButtonFormField(
-        items: listFordropdown?.map<DropdownMenuItem<String>>((String value) {
+        // value: haveValue  ? controller.text : null,
+        items: listForDropdown?.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
           );
         }).toList(),
         onChanged: (String? newValue) {
-          controller?.text = newValue!;
+          controller.text = newValue!;
         },
         hint: Text(hintText ?? ''),
       );
+
   TextFormField get textFormFieldForBirthDay => TextFormField(
         controller: controller,
         decoration: InputDecoration(
