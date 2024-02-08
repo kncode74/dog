@@ -180,3 +180,4 @@ class DogCard extends BaseView<DogCardViewModel> {
     );
   }
 }
+// TODO edited
