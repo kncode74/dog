@@ -51,12 +51,41 @@ class EditProfileDogVM extends BaseController {
     }
   }
 
-  addToStore() async {
+  addToStore({
+    String? status,
+    String? species,
+    String? price,
+    String? sex,
+    String? birthDay,
+    String? color,
+    String? weight,
+    String? height,
+    String? take,
+    String? out,
+  }) async {
     try {
-      String url = await upLoadPhoto();
-      await dogCollection.doc(dogDetail.value?.id ?? '').update(
-        {'image_profile': url},
-      );
+      String? url;
+      if (image.value != null) {
+        url = await upLoadPhoto();
+      }
+
+      Map<String, dynamic> updateData = {
+        if (url != null) 'image_profile': url,
+        'price': price,
+        'color': color,
+        'sex': sex,
+        'species': species,
+        'status': status,
+        'birth_day': birthDay,
+        'take': take,
+        'out': out,
+        'weight': weight,
+        'height': height,
+      };
+      if (updateData.isNotEmpty) {
+        await dogCollection.doc(dogDetail.value?.id ?? '').update(updateData);
+      }
+
       print(dogDetail.value?.id ?? '');
     } catch (e) {
       print('Error adding data to Firestore: $e');

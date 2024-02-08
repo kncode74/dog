@@ -9,11 +9,13 @@ import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/cached_network_image_widget.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_card.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_content.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/main_app_bar.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/vaccine/add_vaccine/add_vaccine.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/vaccine/add_vaccine/add_vaccine.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/vaccine/dog_vaccine.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/vaccine/edit_vaccine/edit_vaccine.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/vaccine/edit_vaccine/edit_vaccine.vm.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class DogVaccineView extends BaseView<DogVaccineVM> {
@@ -26,7 +28,13 @@ class DogVaccineView extends BaseView<DogVaccineVM> {
     controller.init();
   }
 
-  Widget _listContent(int index, String date, String vaccine, String image) {
+  Widget _listContent(
+    int index,
+    String date,
+    String vaccine,
+    String image,
+    BuildContext context,
+  ) {
     return DocumentContent(
       title: 'ครั้งที่  $index',
       widgetList: [
@@ -52,12 +60,36 @@ class DogVaccineView extends BaseView<DogVaccineVM> {
           ],
         ),
         VSpacings.xxSmall,
-        CachedNetworkImageWidget(
-          imageUrl: image,
-          imageDefaultUrl: icon.placeHolder,
-          heightPlace: 120,
+        InkWell(
+          onTap: () {
+            showImage(context, image);
+          },
+          child: CachedNetworkImageWidget(
+            imageUrl: image,
+            imageDefaultUrl: icon.placeHolder,
+            heightPlace: 120,
+          ),
         ),
       ],
+    );
+  }
+
+  void showImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog.fullscreen(
+        child: Scaffold(
+          appBar: MainAppBar().imageAppbar,
+          body: PhotoView(
+            imageProvider: NetworkImage(imageUrl),
+            backgroundDecoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2,
+          ),
+        ),
+      ),
     );
   }
 
@@ -73,17 +105,17 @@ class DogVaccineView extends BaseView<DogVaccineVM> {
                 var vaccine = controller.dogVaccine[index];
                 return InkWell(
                   onTap: () {
-                    Get.to(
-                      EditVaccineView(),
-                      binding: EditVaccineBinding(),
-                      arguments: {
-                        'dog': vaccine,
-                        'id': controller.id,
-                      },
-                    )!
-                        .then(
-                      (_) => controller.init(),
-                    );
+                    // Get.to(
+                    //   EditVaccineView(),
+                    //   binding: EditVaccineBinding(),
+                    //   arguments: {
+                    //     'dog': vaccine,
+                    //     'id': controller.id,
+                    //   },
+                    // )!
+                    //     .then(
+                    //   (_) => controller.init(),
+                    // );
                   },
                   child: Column(
                     children: [
@@ -92,6 +124,7 @@ class DogVaccineView extends BaseView<DogVaccineVM> {
                         vaccine.vaccine?[0].date ?? '',
                         vaccine.vaccine?[0].vaccineType ?? '',
                         vaccine.vaccine?[0].images ?? '',
+                        context,
                       )
                     ],
                   ),

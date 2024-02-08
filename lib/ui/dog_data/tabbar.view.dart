@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_view.dart';
 import 'package:getx_mvvm_boilerplate/assets/r.dart';
@@ -16,6 +18,8 @@ import 'package:getx_mvvm_boilerplate/ui/dog_data/vaccine/dog_vaccine.view.dart'
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/dog_pedigree.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/photo_dog/dog_photo.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.vm.dart';
+import 'package:getx_mvvm_boilerplate/ui/navigator_screen/navigator_screen.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/navigator_screen/navigator_screen.vm.dart';
 
 class TabBarDogView extends BaseView<TabbarDogVM> {
   @override
@@ -29,19 +33,18 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
     String species,
     String status,
     String price,
-    String etc,
   ) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Row(
         children: [
           CachedNetworkImageWidget(
             imageUrl: image,
             imageDefaultUrl: icon.placeHolder,
-            heightPlace: 80,
+            heightPlace: 60,
             imageWidgetBuilder: (context, imageProvider) {
               return CircleAvatar(
-                radius: 80,
+                radius: 60,
                 backgroundImage: imageProvider,
               );
             },
@@ -61,11 +64,11 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
                   ],
                 ),
                 _priceContent(price),
-                Row(
-                  children: [
-                    Text(etc),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Text(etc),
+                //   ],
+                // ),
               ],
             ),
           )
@@ -93,7 +96,7 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
 
   Widget _button(DogInstance? dog) {
     return Row(
-      mainAxisAlignment:MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         OutlinedButton(
           style: OutlinedButton.styleFrom(
@@ -180,8 +183,9 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
   }
 
   Widget _filterDog() {
-    return DocumentCard(
-      widget: Row(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
         children: [
           Column(
             children: [
@@ -190,24 +194,35 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
             ],
           ),
           HSpacings.medium,
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: controller.filterDog.value.map((dog) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: CachedNetworkImageWidget(
-                    imageUrl: dog.profileImage,
-                    imageDefaultUrl: icon.placeHolder,
-                    imageWidgetBuilder: (context, provider) {
-                      return CircleAvatar(
-                        radius: 20,
-                        backgroundImage: provider,
-                      );
-                    },
-                  ),
-                );
-              }).toList(),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: controller.filterDog.value.map((dog) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: CachedNetworkImageWidget(
+                      imageUrl: dog.profileImage,
+                      imageDefaultUrl: icon.placeHolder,
+                      imageWidgetBuilder: (context, provider) {
+                        return InkWell(
+                          onTap: () {
+                            Get.offAll(
+                              TabBarDogView(),
+                              arguments: {'dogId': dog.id},
+                              binding: TabBarDogBinding(),
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 35,
+                            backgroundImage: provider,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],
@@ -224,8 +239,20 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
           length: 4,
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar:
-                MainAppBar(title: '${i18n.id.tr} : ${dog?.id}').defaultAppbar,
+            appBar: MainAppBar(title: '${i18n.id.tr} : ${dog?.id}', actions: [
+              InkWell(
+                onTap: () {
+                  Get.offAll(
+                    NavigatorView(),
+                    binding: NavigatorBinding(),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: SvgPicture.asset(icon.home),
+                ),
+              ),
+            ]).defaultAppbar,
             body: Column(
               children: [
                 _header(
@@ -233,7 +260,6 @@ class TabBarDogView extends BaseView<TabbarDogVM> {
                   dog?.species ?? '',
                   dog?.status ?? '',
                   dog?.price ?? '',
-                  dog?.etc ?? '',
                 ),
                 _filterDog(),
                 _button(dog),

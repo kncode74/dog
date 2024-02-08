@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ import 'package:getx_mvvm_boilerplate/commons/constants/ui_constants.dart';
 import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/main_app_bar.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/detection_dog/detection_dog.vm.dart';
+import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.vm.dart';
 
 class DetectionDogView extends BaseView<DetectionDogVM> {
   @override
@@ -16,67 +19,91 @@ class DetectionDogView extends BaseView<DetectionDogVM> {
     controller.init();
   }
 
+  void clickAndShow() {
+    String idDog = controller.output[0]['label'].split(' ')[1];
+    print(idDog);
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection('dog').doc(idDog);
+    documentReference.get().then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        Get.to(
+          TabBarDogView(),
+          arguments: {'dogId': idDog},
+          binding: TabBarDogBinding(),
+        );
+      } else {}
+    }).catchError((error) {});
+  }
+
   @override
   Widget render(BuildContext context) {
     return Scaffold(
       appBar: controller.dogType == 1
           ? MainAppBar(
-        title: "Dog Face",
-        images: icon.nose,
-      ).detectionAppbar
+              title: "Dog Face",
+              images: icon.nose,
+            ).detectionAppbar
           : MainAppBar(
-        title: "Dog Nose",
-        images: icon.face,
-      ).detectionAppbar,
+              title: "Dog Nose",
+              images: icon.face,
+            ).detectionAppbar,
       body: Column(
         children: [
           Obx(
-                () =>
-            controller.isLoading.value
+            () => controller.isLoading.value
                 ? const Center(
-              child: CircularProgressIndicator(),
-            )
+                    child: CircularProgressIndicator(),
+                  )
                 : SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  controller.image?.value == null
-                      ? Container()
-                      : SizedBox(
-                    height: 300,
-                    width: 300,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: controller.image?.value != null
-                          ? Image.file(
-                        controller.image.value!,
-                        fit: BoxFit.cover,
-                      )
-                          : Container(),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        controller.image?.value == null
+                            ? _placeDetection()
+                            : Container(
+                                height: 300,
+                                margin: EdgeInsets.all(20),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: controller.image?.value != null
+                                      ? Image.file(
+                                          controller.image.value!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Container(),
+                                ),
+                              ),
+                        controller.output.value.isNotEmpty
+                            ? InkWell(
+                                onTap: () {
+                                  clickAndShow();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 85, right: 50, top: 10, bottom: 20),
+                                  child: ListTile(
+                                    title: Text(
+                                      'ID : ${controller.output[0]['label'].split(' ')[1]}',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    subtitle: const Text(
+                                      'กดเพื่อดู',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
                     ),
                   ),
-                  controller.output.value.isNotEmpty
-                      ? InkWell(
-                    onTap: () {
-                      controller.clickAndShow();
-                    },
-                    child: Text(
-                      'ID : ${controller.output[0]['label'].split(' ')[1]}',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                  )
-                      : Center(child: _placeDetection())
-                ],
-              ),
-            ),
           ),
           _button(),
         ],
@@ -148,7 +175,9 @@ class DetectionDogView extends BaseView<DetectionDogVM> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: ThemeData().secondColor()),
-              onPressed: () {},
+              onPressed: () {
+                controller.pickCamaraImage();
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -143,17 +143,16 @@ class AddDataDog extends BaseView<AddDataDogViewModel> {
     return Scaffold(
       appBar: MainAppBar(title: 'Add Data of Dogs').defaultAppbar,
       body: Obx(
-        () => Form(
-          key: formKey,
-          child: Theme(
-            data: ThemeData(
-              colorScheme: Theme.of(context).colorScheme.copyWith(
-                    primary: ThemeData().secondColor(),
-                  ),
-            ),
-            child: Column(
-              children: [
-                Stepper(
+        () => Theme(
+          data: ThemeData(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  primary: ThemeData().secondColor(),
+                ),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Stepper(
                   currentStep: controller.currentStep.value,
                   steps: getStep(context),
                   onStepTapped: (int index) {
@@ -166,32 +165,32 @@ class AddDataDog extends BaseView<AddDataDogViewModel> {
                     controller.currentStep -= 1;
                   },
                 ),
-                MyButtonTheme(
-                        onFunction: () {
-                          if (formKey.currentState != null &&
-                              formKey.currentState!.validate()) {
-                            controller.saveData(
-                              id: idController.text,
-                              status: statusController.text,
-                              price: priceController.text,
-                              sex: sexController.text,
-                              species: speciesController.text,
-                              birthDay: birthDayController.text,
-                              weight: weightController.text,
-                              height: heightController.text,
-                              color: colorController.text,
-                              take: _takeController.text,
-                              dad: _dadController.text,
-                              mom: _momController.text,
-                            );
-                          }
-                        },
-                        nameButton: 'Done')
-                    .outlineButton()
-                // MyButtonTheme(
-                ,
-              ],
-            ),
+              ),
+              MyButtonTheme(
+                      onFunction: () {
+                        // if (formKey.currentState != null &&
+                        //     formKey.currentState!.validate()) {
+                        controller.saveData(
+                          id: idController.text,
+                          status: statusController.text,
+                          price: priceController.text,
+                          sex: sexController.text,
+                          species: speciesController.text,
+                          birthDay: birthDayController.text,
+                          weight: weightController.text,
+                          height: heightController.text,
+                          color: colorController.text,
+                          take: _takeController.text,
+                          dad: _dadController.text,
+                          mom: _momController.text,
+                        );
+                        // }
+                      },
+                      nameButton: 'Done')
+                  .outlineButton()
+              // MyButtonTheme(
+              ,
+            ],
           ),
         ),
       ),

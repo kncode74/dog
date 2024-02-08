@@ -14,6 +14,8 @@ import 'package:getx_mvvm_boilerplate/ui/_widgets/document_widget/image.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/dog_pedigree.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/edit_pedigree/edit_pedigree.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/pedigree/edit_pedigree/edit_pedigree.vm.dart';
+import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.view.dart';
+import 'package:getx_mvvm_boilerplate/ui/dog_data/tabbar.vm.dart';
 import 'package:image_picker/image_picker.dart';
 
 // TODO รับสายพันธุ์ผ่าน argument
@@ -30,57 +32,67 @@ class DogPedigreeView extends BaseView<DogPedigreeVM> {
   }
 
   Widget _listContent(
+    String image,
     String title,
     String id,
     String breed,
     String sex,
   ) {
-    return Container(
-      margin: EdgeInsets.only(left: 25, right: 25),
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          width: 1,
-          color: ThemeData().secondColor(),
+    return InkWell(
+      onTap: () {
+        Get.offAll(
+          TabBarDogView(),
+          arguments: {'dogId': id},
+          binding: TabBarDogBinding(),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 25, right: 25),
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            width: 1,
+            color: ThemeData().secondColor(),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            SizedBox(width: 10),
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(icon.nose),
-            ),
-            SizedBox(width: 30),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${title.tr} : $id',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('$breed , $sex'),
-                    ],
-                  ),
-                ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              SizedBox(width: 10),
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage(image),
               ),
-            )
-          ],
+              SizedBox(width: 30),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${title.tr} : $id',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('$breed , $sex'),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -114,17 +126,19 @@ class DogPedigreeView extends BaseView<DogPedigreeVM> {
                       ],
                     ),
                     _listContent(
+                      icon.male,
                       i18n.dad,
                       dog?.dad ?? '',
-                      i18n.yorkshireTerrier.tr,
-                      i18n.female.tr,
+                      i18n.pomeranian.tr,
+                      i18n.male.tr,
                     ),
                     VSpacings.small,
                     _listContent(
+                      icon.female,
                       i18n.mom,
                       dog?.mom ?? '',
-                      i18n.yorkshireTerrier,
-                      i18n.female,
+                      i18n.pomeranian.tr,
+                      i18n.female.tr,
                     )
                   ],
                 ),

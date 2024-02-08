@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_mvvm_boilerplate/application/base/base_controller.dart';
 import 'package:getx_mvvm_boilerplate/commons/constants/argument_key.dart';
@@ -55,6 +56,16 @@ class DetectionDogVM extends BaseController {
     await classifyImage(image.value!);
   }
 
+  Future pickCamaraImage() async {
+    var cameraImage = await _imagePicker.pickImage(source: ImageSource.camera);
+    if (cameraImage == null) return;
+
+    isLoading.value = true;
+    image.value = File(cameraImage.path);
+
+    classifyImage(image.value!);
+  }
+
   Future<void> classifyImage(File image) async {
     var outputResult = await Tflite.runModelOnImage(
       path: image.path,
@@ -63,26 +74,36 @@ class DetectionDogVM extends BaseController {
       imageMean: 127.5,
       imageStd: 127.5,
     );
-
     output.value = outputResult ?? [];
     isLoading.value = false;
-    await Future.delayed(const Duration(seconds: 1));
-
-    print('Output: $outputResult');
+    if (output.value.isEmpty) {
+      _showNoResultsDialog();
+    } else {
+      await Future.delayed(const Duration(seconds: 1));
+      print('Output: $outputResult');
+    }
   }
 
-  void clickAndShow() {
-    String idDog = output[0]['label'].split(' ')[1];
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection('dog').doc(idDog);
-    documentReference.get().then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        Get.to(
-          TabBarDogView(),
-          arguments: {'dogId': idDog},
-          binding: TabBarDogBinding(),
-        );
-      } else {}
-    }).catchError((error) {});
+  void _showNoResultsDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('ค้นหาไม่เจอ'),
+        content: const Text('ไม่พบผลลัพธ์จากการค้นหาสุนัข'),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: ThemeData().textTheme.labelLarge,
+            ),
+            child: const Text('ตกลง'),
+            onPressed: () {
+              image.value = null;
+              Get.back();
+            },
+          ),
+        ],
+      ),
+    );
   }
+
+
 }

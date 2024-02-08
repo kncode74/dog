@@ -34,21 +34,21 @@ class AddDataDogViewModel extends BaseController {
   }) async {
     Map<String, dynamic> dog = {
       'id': id,
-      'price': price,
-      'color': color,
-      'sex': sex,
-      'species': species,
-      'status': status,
-      'birth_day': birthDay,
+      'price': '20,000',
+      'color': 'ส้ม',
+      'sex': 'เพศเมีย',
+      'species': 'ปอมเมอเรนียน',
+      'status': 'พ่อพันธุ์ - แม่พันธุ์',
+      'birth_day': '1/12/2566',
       'pedigree': '',
       'image_profile': '',
-      'take': take,
+      'take': '1/12/2566',
       'out': '',
-      'dad': dad,
-      'mom': mom,
+      'dad': '63001',
+      'mom': '63002',
       'etc': '',
-      'weight': weight,
-      'height': height,
+      'weight': '5',
+      'height': '15',
     };
     await dogCollection.doc(id).set(dog);
     Get.back();

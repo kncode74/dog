@@ -33,7 +33,7 @@ final Map<String, String> en = {
   "_puppy": "Puppy",
   "_sold": "Sold",
   "_all": "All",
-  "_Pomeranian": "Pomeranian",
+  "_pomeranian": "Pomeranian",
   "_yorkshire_terrier": "Yorkshire Terrier",
   "_Bulldog": "Bulldog",
   "_male": "Male",

@@ -6,12 +6,12 @@ import 'package:getx_mvvm_boilerplate/ui/_theme/app_theme.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/cached_network_image_widget.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_card.dart';
 import 'package:getx_mvvm_boilerplate/ui/_widgets/document_content.dart';
+import 'package:getx_mvvm_boilerplate/ui/_widgets/main_app_bar.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/photo_dog/add_photo/add_photo.view.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/photo_dog/add_photo/add_photo.vm.dart';
 import 'package:getx_mvvm_boilerplate/ui/dog_data/photo_dog/dog_photo.vm.dart';
-import 'package:getx_mvvm_boilerplate/ui/dog_data/photo_dog/edit_photo/edit_photo.view.dart';
-import 'package:getx_mvvm_boilerplate/ui/dog_data/photo_dog/edit_photo/edit_photo.vm.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class DogPhotoView extends BaseView<DogPhotoVM> {
   DogPhotoView() {
@@ -37,28 +37,67 @@ class DogPhotoView extends BaseView<DogPhotoVM> {
               crossAxisCount: 3,
             ),
             itemBuilder: (context, gridIndex) {
-              return Padding(
-                padding: const EdgeInsets.all(3),
-                child: CachedNetworkImageWidget(
-                  imageUrl: image[gridIndex],
-                  imageDefaultUrl: icon.placeHolder,
-                  imageWidgetBuilder: (context, imageProvider) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
+              return InkWell(
+                onTap: () {
+                  _showImageDialog(context, image);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: CachedNetworkImageWidget(
+                    imageUrl: image[gridIndex],
+                    imageDefaultUrl: icon.placeHolder,
+                    imageWidgetBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               );
             },
           ),
         )
       ],
+    );
+  }
+
+  void _showImageDialog(BuildContext context, List images) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog.fullscreen(
+          child: Scaffold(
+            appBar: MainAppBar().imageAppbar,
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: PhotoViewGallery.builder(
+                    itemCount: images.length,
+                    builder: (context, index) {
+                      var url = images[index];
+                      return PhotoViewGalleryPageOptions(
+                        imageProvider: NetworkImage(url),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2,
+                      );
+                    },
+                    scrollPhysics: const BouncingScrollPhysics(),
+                    backgroundDecoration:
+                        const BoxDecoration(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -41,7 +41,7 @@ class MainAppBar {
 
   AppBar get detectionAppbar => AppBar(
         centerTitle: true,
-        backgroundColor:ThemeData().mainColor(),
+        backgroundColor: ThemeData().mainColor(),
         title: _titleMain(title ?? ''),
         iconTheme: const IconThemeData(color: Color.fromRGBO(57, 57, 57, 1)),
         actions: [
@@ -111,6 +111,23 @@ class MainAppBar {
             child: SvgPicture.asset(icon.save),
           ),
         ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      );
+
+  AppBar get imageAppbar => AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: _titleMain(title ?? ''),
+        actions: actions,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,

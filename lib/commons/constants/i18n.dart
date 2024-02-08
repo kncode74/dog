@@ -33,7 +33,7 @@ class I18N {
   final String puppy = '_puppy';
   final String sold = '_sold';
   final String all = '_all';
-  final String yomeranian = '_pomeranian';
+  final String pomeranian = '_pomeranian';
   final String yorkshireTerrier = '_yorkshire_terrier';
   final String bulldog = '_bulldog';
   final String male = '_male';
