@@ -1,6 +1,4 @@
-# getx_mvvm_boilerplate
-
-GetX MVVM boilerplate
+# getx_mvvm
 
 ## Getting Started
 
